@@ -25,8 +25,8 @@ footer {
   color: #fff;
 }
 
-nav{
-   margin-top: 1rem;
+nav {
+  margin-top: 1rem;
 }
 
 nav ul {
@@ -40,15 +40,15 @@ nav ul {
   display: inline-block;
   text-decoration: none;
   color: white;
-  background-color:#698898;
+  background-color: #698898;
   border-radius: 12px;
   padding: 8px 16px;
-  transition: 0.2s ease;  
+  transition: 0.2s ease;
   cursor: pointer;
 }
 
 .nav-link:hover {
-    background-color:#274a5d;
+  background-color: #274a5d;
 }
 
 main {
@@ -60,6 +60,9 @@ main {
   margin: 0 auto;
   padding-inline: 1rem;
 }
+
+
+/** TOP SECTION */
 
 .top-section {
   display: flex;
@@ -75,18 +78,44 @@ main {
   display: inline-flex;
   text-decoration: none;
   color: white;
-  background-color:#698898;
+  background-color: #698898;
   border-radius: 12px;
   padding: 8px 16px;
   margin-top: 12px;
-  transition: 0.2s ease;  
+  transition: 0.2s ease;
   cursor: pointer;
 }
 
 .register-button:hover {
-    background-color:#274a5d;
+  background-color: #274a5d;
 }
 
+/** RACE SECTION */
+.race-section h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.race-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.race-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #bcd3db;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #9bb7c2;
+  padding: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.race-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
 
 footer {
   display: flex;

@@ -5,11 +5,11 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, "index.html"),
-        add: resolve(__dirname, "add.html"),
-        edit: resolve(__dirname, "edit.html"),
-        login: resolve(__dirname, "login.html"),
-        register: resolve(__dirname, "register.html"),
+        main: resolve(import.meta.dirname, "index.html"),
+        add: resolve(import.meta.dirname, "add.html"),
+        edit: resolve(import.meta.dirname, "edit.html"),
+        login: resolve(import.meta.dirname, "login.html"),
+        register: resolve(import.meta.dirname, "register.html"),
       }
     }
   },
