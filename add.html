@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="sv">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loppet</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>Loppet</h1>
+        <nav>
+            <ul id="menu">
+                <li><a href="/" class="nav-link">Startsida</a></li>
+                <li><a href="/add" class="nav-link current">Lägg till lopp</a></li>
+                <li><a href="/login" class="nav-link">Logga in</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="page-section">
+            <h2>Lägg till lopp</h2>
+            <p>Fyll i formuläret för att lägga till ett lopp på sidan.</p>
+
+            <span id="message" class="message"></span>
+
+            <form id="race-form" method="POST">
+                <label for="name">Namn på loppet: </label>
+                <span id="racename-error" class="error"></span>
+                <input type="text" id="name" name="name">
+
+                <label for="date">Datum:</label>
+                <span id="date-error" class="error"></span>
+                <input type="date" id="date" name="date">
+
+                <label for="distance">Distans(km):</label>
+                <span id="distance-error" class="error"></span>
+                <input type="number" id="distance" name="distance" min="1">
+
+                <label for="location">Plats:</label>
+                <span id="location-error" class="error"></span>
+                <input type="text" id="location" name="location">
+
+                <label for="description">Om loppet:</label>
+                <textarea id="description" name="description"></textarea>
+
+                <button type="submit" class="button">Lägg till lopp</button>
+
+
+            </form>
+
+
+
+        </section>
+    </main>
+    <footer>
+        <p><strong>Av: </strong> Rasmus Bergkvist, 2026</p>
+    </footer>
+    <script type="module" src="/src/checkAuth.js"></script>
+    <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

@@ -130,12 +130,14 @@ footer {
   padding-block: 2rem;
 }
 
-/** RESGISTER */
-.account-section {
+/*******************************/
+/** RESGISTER, LOGIN och ADD **/
+/*****************************/
+.page-section {
   display: flex;
   flex-direction: column;
   padding: 1rem;
-  max-width: 450px;
+  max-width: 500px;
   width: 100%;
   margin: 2rem auto;
   align-items: center;
@@ -146,13 +148,17 @@ footer {
 }
 
 form {
-  max-width: 450px;
   margin-block: 1.5rem;
+  max-width: 300px;
+  width: 100%;
 }
 
 input[type="text"],
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="date"],
+input[type="number"],
+textarea {
   display: block;
   margin-bottom: 1.2rem;
   padding: 8px 14px;
@@ -162,6 +168,13 @@ input[type="password"] {
   border: 2px solid #9bb7c2;
 }
 
+textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+
+
 label {
   display: block;
   font-size: 1.1rem;
@@ -170,7 +183,7 @@ label {
 
 .error {
   display: block;
-  color: rgb(226, 78, 110)
+  color: red;
 }
 
 .button {

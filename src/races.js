@@ -1,4 +1,116 @@
 const raceList = document.getElementById("race-list");
+const raceForm = document.getElementById("race-form");
+const message = document.getElementById("message");
+
+//Skapa lopp
+export function addRace() {
+    if (!raceForm) return;
+
+    raceForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        //Hämtar värden från input-fält
+        const name = document.getElementById("name").value;
+        const date = document.getElementById("date").value;
+        const distance = document.getElementById("distance").value;
+        const location = document.getElementById("location").value;
+        const description = document.getElementById("description").value;
+
+        //Felmeddelande
+        const raceNameError = document.getElementById("racename-error");
+        const dateError = document.getElementById("date-error");
+        const distanceError = document.getElementById("distance-error");
+        const locationError = document.getElementById("location-error");
+
+        //Rensar från tidigare meddelanden
+        raceNameError.innerHTML = "";
+        dateError.innerHTML = "";
+        distanceError.innerHTML = "";
+        locationError.innerHTML = "";
+        message.innerHTML = "";
+        message.style.color = "";
+
+
+        //Valideing
+        let error = false;
+
+        if (!name) {
+            raceNameError.innerHTML = "Fyll i namn på loppet."
+            error = true;
+        }
+
+        if (!date) {
+            dateError.innerHTML = "Välj ett datum.";
+            error = true;
+        }
+
+        if (!distance) {
+            distanceError.innerHTML = "Ange distans i km.";
+            error = true;
+        }
+
+        if (!location) {
+            locationError.innerHTML = "Fyll i en plats.";
+            error = true;
+        }
+
+        if (error) return;
+
+        let newRace = {
+            name,
+            date,
+            distance,
+            location,
+            description
+        }
+
+        //Hämtar token
+        const token = localStorage.getItem("raceToken");
+
+        //POST-anrop
+        try {
+            const response = await fetch("http://localhost:3000/races", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": "Bearer " + token
+                },
+                //Omvandlar till JSON-data
+                body: JSON.stringify(newRace)
+
+            });
+            //Om anoropet misslyckades
+            if (!response.ok) {
+                throw new Error(response.status);
+            }
+            //Omvandlar resultatet till JS-objekt
+            const result = await response.json();
+
+            message.style.color = "green";
+            message.innerHTML = "Ditt lopp är nu tillagt på sidan!"
+
+            setTimeout(() => {
+                window.location.href = "/"
+            }, 3000);
+
+            return result;
+
+        } catch (error) {
+            message.style.color = "red";
+            if (error.message === "403") {
+                message.innerHTML = "Du måste vara inloggad för att lägga till ett lopp!";
+            } else if (error.message === "409") {
+                message.innerHTML = "Loppet finns redan registat!";
+            } else {
+                message.innerHTML = "Det gick inte att lägga till lopp. Försök igen senare!"
+            }
+        }
+
+    });
+}
+
+
+
 
 //Hämtar lopp
 export async function getRaces() {
