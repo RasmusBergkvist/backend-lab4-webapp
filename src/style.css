@@ -95,6 +95,7 @@ main {
   text-align: center;
   margin-bottom: 1rem;
 }
+
 .race-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -117,8 +118,78 @@ main {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
+.message {
+  text-align: center;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
 footer {
   display: flex;
   justify-content: center;
   padding-block: 2rem;
+}
+
+/** RESGISTER */
+.account-section {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  max-width: 450px;
+  width: 100%;
+  margin: 2rem auto;
+  align-items: center;
+  border-radius: 16px;
+  background-color: #e2e7e5;
+  border: 1px solid #9bb7c2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+form {
+  max-width: 450px;
+  margin-block: 1.5rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  display: block;
+  margin-bottom: 1.2rem;
+  padding: 8px 14px;
+  width: 100%;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 2px solid #9bb7c2;
+}
+
+label {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.error {
+  display: block;
+  color: rgb(226, 78, 110)
+}
+
+.button {
+  display: block;
+  margin: 0 auto;
+  padding: 10px 16px;
+  background-color: #698898;
+  color: white;
+  font-size: 1rem;
+  border-radius: 12px;
+  border: 0px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.button:hover {
+  background-color: #274a5d;
+}
+
+.button:active {
+  transform: scale(0.98);
 }
