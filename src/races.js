@@ -100,7 +100,7 @@ export function addRace() {
             if (error.message === "403") {
                 message.innerHTML = "Du måste vara inloggad för att lägga till ett lopp!";
             } else if (error.message === "409") {
-                message.innerHTML = "Loppet finns redan registat!";
+                message.innerHTML = "Loppet finns redan registrerat!";
             } else {
                 message.innerHTML = "Det gick inte att lägga till lopp. Försök igen senare!"
             }

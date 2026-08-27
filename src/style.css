@@ -96,6 +96,12 @@ main {
   margin-bottom: 1rem;
 }
 
+.message {
+  text-align: center;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
 .race-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -118,11 +124,7 @@ main {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
-.message {
-  text-align: center;
-  font-weight: 600;
-  margin-top: 8px;
-}
+
 
 footer {
   display: flex;

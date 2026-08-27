@@ -5,16 +5,17 @@ import { getRaces, addRace } from './races';
 //Väntar tills sidan har laddats klart.
 document.addEventListener("DOMContentLoaded", () => {
     const raceList = document.getElementById("race-list");
-     const raceForm = document.getElementById("race-form");
+    const raceForm = document.getElementById("race-form");
     const registerForm = document.getElementById("register-form");
     const loginForm = document.getElementById("login-form");
+    const menu = document.getElementById("menu")
 
     //Hämtar lopp
     if (raceList) {
         getRaces();
     }
     //Lägger till lopp
-    if(raceForm){
+    if (raceForm) {
         addRace();
     }
 
@@ -28,7 +29,37 @@ document.addEventListener("DOMContentLoaded", () => {
         loginUser();
     }
 
+    if (menu) {
+        changeMenu();
+    }
+
 
 });
 
+//Ändra huvudmenyn dymnaiskt
+function changeMenu() {
+    //Kontroll av token styr hur menyn ser ut
+    if (!localStorage.getItem("raceToken")) {
+        menu.innerHTML = `
+        <li><a href="/" class="nav-link current">Startsida</a></li>
+        <li><a href="/login" class="nav-link">Logga in</a></li>
+        `
+    } else {
+        menu.innerHTML =
+            `
+                <li><a href="/" class="nav-link current">Startsida</a></li>
+                <li><a href="/add" class="nav-link">Lägg till lopp</a></li>
+                <li><a href="/" id="logout-link" class="nav-link">Logga ut</a></li>
+                `
+    }
 
+    //Raderar token vid utloggning.
+    const logout = document.getElementById("logout-link");
+    if (logout) {
+        logout.addEventListener("click", () => {
+            localStorage.removeItem("raceToken");
+        });
+
+    }
+
+}
