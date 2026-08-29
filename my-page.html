@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="sv">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loppet</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>Loppet</h1>
+        <nav>
+            <ul id="menu">
+                <li><a href="/" class="nav-link current">Startsida</a></li>
+                <li><a href="/login" class="nav-link">Logga in</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="top-section">
+            <h2 id="welcome">Välkommen!</h2>
+            <p>Här kan du lägga till ett lopp som du vill tipsa om. Du kan även redigera och ta bort dina publicerade
+                bidrag direkt från denna sida.</p>
+            <a href="/add" class="register-button">Lägg till lopp</a>
+        </section>
+
+
+        <section class="race-section">
+            <h2>Mina publicerade lopp</h2>
+             <span id="message" class="message"></span>
+
+            <div id="my-race-list" class="race-container">
+               
+
+                <!-- Här renderas alla lopp-->
+
+            </div>
+
+        </section>
+    </main>
+    <footer>
+        <p><strong>Av: </strong> Rasmus Bergkvist, 2026</p>
+    </footer>
+    <script type="module" src="/src/checkAuth.js"></script>
+    <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

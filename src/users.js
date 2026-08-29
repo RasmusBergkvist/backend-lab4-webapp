@@ -1,3 +1,5 @@
+"use strict";
+
 //Hämtar element från DOM
 const message = document.getElementById("message");
 const registerForm = document.getElementById("register-form");
@@ -159,7 +161,8 @@ export function loginUser() {
 
             const data = await response.json();
             localStorage.setItem("raceToken", data.token);
-            window.location.href = "/add";
+            localStorage.setItem("username", data.username);
+            window.location.href = "/my-page";
 
         } catch (error) {
             message.style.color = "red";

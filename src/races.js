@@ -1,4 +1,6 @@
+"use strict";
 const raceList = document.getElementById("race-list");
+const myRaceList = document.getElementById("my-race-list");
 const raceForm = document.getElementById("race-form");
 const message = document.getElementById("message");
 
@@ -113,7 +115,7 @@ export function addRace() {
 
 
 //Hämtar lopp
-export async function getRaces() {
+async function getRaces() {
     try {
         const response = await fetch("http://localhost:3000/races");
 
@@ -124,8 +126,7 @@ export async function getRaces() {
         const data = await response.json();
         console.log(data);
 
-        //Anropar funktionen och skickar med svart
-        renderRaces(data)
+        return data;
 
     } catch (error) {
         if (message) {
@@ -137,14 +138,15 @@ export async function getRaces() {
     }
 }
 
-//Skriver ut lopp till DOM
-async function renderRaces(data) {
+//Skriver ut alla lopp till startsida
+export async function renderRaces() {
 
     if (!raceList) return;
 
     //Rensar tidigare innehåll.
     raceList.innerHTML = "";
     try {
+        const data = await getRaces();
         data.forEach(race => {
             //Formatera datum
             const formattedDate = race.date.slice(0, 10);
@@ -169,3 +171,63 @@ async function renderRaces(data) {
         return;
     }
 }
+
+
+//Renderar data till min sida
+export async function renderMyPage() {
+
+    if (!myRaceList) return;
+
+    //Hämtar användarnamn
+    const currentUser = localStorage.getItem("username");
+
+    //Skriver ut användarnamn till rubrik
+    const welcome = document.getElementById("welcome");
+
+    if(welcome && currentUser) {
+        welcome.innerHTML =`Välkommen ${currentUser}!`;
+    }
+
+    //Rensar tidigare innehåll.
+    myRaceList.innerHTML = "";
+    try {
+          const data = await getRaces();
+
+
+        //Filterar bort lopp som inte användaren har skapa
+        const myRaces =  data.filter(race => currentUser === race.createdBy);
+
+        //Om användaren inte har publicerat några lopp
+        if(myRaces.length === 0) {
+            message.innerHTML ="Du har inte publicerat några lopp ännu.";
+            return;
+        }
+
+        myRaces.forEach(race => {
+
+            //Formatera datum
+            const formattedDate = race.date.slice(0, 10);
+
+            //Skapar artikel-element till loppen.
+            const articleEl = document.createElement("article");
+            articleEl.classList.add("race-card");
+
+            articleEl.innerHTML = `
+      <h3>${race.name} ${race.distance} km</h3>
+      <p><strong>Datum:</strong> ${formattedDate}</p>
+      <p><strong>Plats:</strong> ${race.location}</p>  
+      <p><strong>Om loppet:</strong> ${race.description}</p>
+      <p><strong>Publicerat av:</strong>  ${race.createdBy} </p>
+      <button class="delete-button" data-set=${race._id}>Radera lopp</button>
+      `
+            //Lägger artikel i raceList.
+            myRaceList.appendChild(articleEl);
+
+        });
+    } catch (error) {
+        console.error("Fel vid rendering av kurser", error)
+        return;
+    }
+}
+
+

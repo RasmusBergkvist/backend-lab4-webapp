@@ -1,6 +1,8 @@
+"use strict";
+
 import './style.css'
 import { createAccount, loginUser } from './users';
-import { getRaces, addRace } from './races';
+import { addRace, renderRaces, renderMyPage } from './races';
 
 //Väntar tills sidan har laddats klart.
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,11 +10,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const raceForm = document.getElementById("race-form");
     const registerForm = document.getElementById("register-form");
     const loginForm = document.getElementById("login-form");
-    const menu = document.getElementById("menu")
+    const menu = document.getElementById("menu");
+    const myRaceList = document.getElementById("my-race-list");
 
     //Hämtar lopp
     if (raceList) {
-        getRaces();
+        renderRaces();
     }
     //Lägger till lopp
     if (raceForm) {
@@ -31,6 +34,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (menu) {
         changeMenu();
+    }
+
+    //Hämtar lopp till min sida
+    if(myRaceList) {
+        renderMyPage();
     }
 
 
@@ -53,11 +61,12 @@ function changeMenu() {
                 `
     }
 
-    //Raderar token vid utloggning.
+    //Raderar token och användarnamn vid utloggning.
     const logout = document.getElementById("logout-link");
     if (logout) {
         logout.addEventListener("click", () => {
             localStorage.removeItem("raceToken");
+            localStorage.removeItem("username");
         });
 
     }
