@@ -1,8 +1,11 @@
 "use strict";
+
 const raceList = document.getElementById("race-list");
 const myRaceList = document.getElementById("my-race-list");
 const raceForm = document.getElementById("race-form");
 const message = document.getElementById("message");
+
+const url = "http://localhost:3000/races";
 
 //Skapa lopp
 export function addRace() {
@@ -71,7 +74,7 @@ export function addRace() {
 
         //POST-anrop
         try {
-            const response = await fetch("http://localhost:3000/races", {
+            const response = await fetch(url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -91,6 +94,7 @@ export function addRace() {
             message.style.color = "green";
             message.innerHTML = "Ditt lopp är nu tillagt på sidan!"
 
+            //Meddelande visas innan omdirigering
             setTimeout(() => {
                 window.location.href = "/"
             }, 3000);
@@ -117,14 +121,15 @@ export function addRace() {
 //Hämtar lopp
 async function getRaces() {
     try {
-        const response = await fetch("http://localhost:3000/races");
+        const response = await fetch(url);
 
+        //Om anoropet misslyckades
         if (!response.ok) {
             throw new Error;
         }
 
+        //Omvandlar resultatet till JS-objekt
         const data = await response.json();
-        console.log(data);
 
         return data;
 
@@ -184,22 +189,22 @@ export async function renderMyPage() {
     //Skriver ut användarnamn till rubrik
     const welcome = document.getElementById("welcome");
 
-    if(welcome && currentUser) {
-        welcome.innerHTML =`Välkommen ${currentUser}!`;
+    if (welcome && currentUser) {
+        welcome.innerHTML = `Välkommen ${currentUser}!`;
     }
 
     //Rensar tidigare innehåll.
     myRaceList.innerHTML = "";
     try {
-          const data = await getRaces();
+        const data = await getRaces();
 
 
         //Filterar bort lopp som inte användaren har skapa
-        const myRaces =  data.filter(race => currentUser === race.createdBy);
+        const myRaces = data.filter(race => currentUser === race.createdBy);
 
         //Om användaren inte har publicerat några lopp
-        if(myRaces.length === 0) {
-            message.innerHTML ="Du har inte publicerat några lopp ännu.";
+        if (myRaces.length === 0) {
+            message.innerHTML = "Du har inte publicerat några lopp ännu.";
             return;
         }
 
@@ -218,16 +223,71 @@ export async function renderMyPage() {
       <p><strong>Plats:</strong> ${race.location}</p>  
       <p><strong>Om loppet:</strong> ${race.description}</p>
       <p><strong>Publicerat av:</strong>  ${race.createdBy} </p>
-      <button class="delete-button" data-set=${race._id}>Radera lopp</button>
+      <button class="delete-button" data-id="${race._id}">Radera lopp</button>
       `
             //Lägger artikel i raceList.
             myRaceList.appendChild(articleEl);
 
         });
     } catch (error) {
-        console.error("Fel vid rendering av kurser", error)
+        console.error("Fel vid rendering av sidan", error)
         return;
     }
 }
+
+//Kontrollera vilken knapp som har trycks på
+export function cardButtons() {
+    if (!myRaceList) return;
+
+    //Lyssnar efter klick i myRaceList
+    myRaceList.addEventListener("click", (event) => {
+
+        //Kontrollera om det är en delete-button som har klickats på
+        if (event.target.classList.contains("delete-button")) {
+
+            //Hämtar rätt id från knappens data-id
+            let id = event.target.dataset.id;
+
+            //Skickar med id som argument till funktionen deleteRace
+            deleteRace(id);
+
+
+        }
+    });
+}
+
+//Raderar lopp
+async function deleteRace(raceId) {
+    if (!confirm("Är du säker att du vill radera loppet?")) return;
+
+    //Hämtar token
+    const token = localStorage.getItem("raceToken");
+
+    try {
+        const response = await fetch(`${url}/${raceId}`, {
+            method: "DELETE",
+            headers: {
+                authorization: "Bearer " + token,
+            }
+        });
+
+        //Om anropet inte lyckas.
+        if (!response.ok) {
+            throw new Error(response.status);
+        }
+        //Anropar funktionen för att uppdatera innehållet på sidan.
+        renderMyPage();
+    } catch (error) {
+        message.style.color = "red";
+        if (error.message === "401") {
+            message.innerHTML = "Du är inte behörig att radera loppet!";
+        } else {
+            message.innerHTML = "Det gick inte att radera till lopp. Försök igen senare!"
+        }
+    }
+
+}
+
+
 
 

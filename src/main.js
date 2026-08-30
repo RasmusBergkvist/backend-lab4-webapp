@@ -2,7 +2,7 @@
 
 import './style.css'
 import { createAccount, loginUser } from './users';
-import { addRace, renderRaces, renderMyPage } from './races';
+import { addRace, renderRaces, renderMyPage, cardButtons } from './races';
 
 //Väntar tills sidan har laddats klart.
 document.addEventListener("DOMContentLoaded", () => {
@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //Hämtar lopp
     if (raceList) {
         renderRaces();
+        
     }
     //Lägger till lopp
     if (raceForm) {
@@ -39,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //Hämtar lopp till min sida
     if(myRaceList) {
         renderMyPage();
+        cardButtons();
     }
 
 
