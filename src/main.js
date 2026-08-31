@@ -2,7 +2,7 @@
 
 import './style.css'
 import { createAccount, loginUser } from './users';
-import { addRace, renderRaces, renderMyPage, cardButtons } from './races';
+import { submitRace, renderRaces, renderMyPage, cardButtons, getEditData } from './races';
 
 //Väntar tills sidan har laddats klart.
 document.addEventListener("DOMContentLoaded", () => {
@@ -18,9 +18,11 @@ document.addEventListener("DOMContentLoaded", () => {
         renderRaces();
         
     }
-    //Lägger till lopp
+    //Lägger till nya lopp eller uppdaterar befintliga.
     if (raceForm) {
-        addRace();
+    
+        getEditData();
+        submitRace();
     }
 
     //Skapar konto

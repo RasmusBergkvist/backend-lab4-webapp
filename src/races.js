@@ -7,8 +7,77 @@ const message = document.getElementById("message");
 
 const url = "http://localhost:3000/races";
 
-//Skapa lopp
-export function addRace() {
+//Hämtar lopp
+async function getRaces() {
+    try {
+        const response = await fetch(url);
+
+        //Om anoropet misslyckades
+        if (!response.ok) {
+            throw new Error;
+        }
+
+        //Omvandlar resultatet till JS-objekt
+        const data = await response.json();
+
+        return data;
+
+    } catch (error) {
+        if (message) {
+            message.innerHTML = "Det gick inte att hämta datan från servern.";
+        }
+
+        throw error;
+
+    }
+}
+
+//Hämtar data som ska uppdateras
+export async function getEditData() {
+
+    //Hämtar id från webbläsarsen fönster
+    const id = window.name;
+
+    //Om id skulle saknas
+    if(!id) return;
+    
+    try {
+        const response = await fetch(`${url}/${id}`);
+
+        //Om anoropet misslyckades
+        if (!response.ok) {
+            throw new Error;
+        }
+
+        //Omvandlar resultatet till JS-objekt
+        const race = await response.json();
+
+        //Läser in datan
+        if (race) {
+            document.getElementById("name").value = race.name;
+            document.getElementById("date").value = race.date.slice(0,10);
+            document.getElementById("distance").value = race.distance;
+            document.getElementById("location").value = race.location;
+            document.getElementById("description").value = race.description;
+
+        }
+
+        //Sparar id som ska ska uppdateras. 
+        raceForm.dataset.id = id;
+
+    } catch (error) {
+        if (message) {
+            message.innerHTML = "Det gick inte att hämta datan från servern.";
+        }
+
+        throw error;
+
+    }
+}
+
+
+//Skapar lopp
+export function submitRace() {
     if (!raceForm) return;
 
     raceForm.addEventListener("submit", async (event) => {
@@ -61,7 +130,7 @@ export function addRace() {
 
         if (error) return;
 
-        let newRace = {
+        let raceData = {
             name,
             date,
             distance,
@@ -69,79 +138,145 @@ export function addRace() {
             description
         }
 
-        //Hämtar token
-        const token = localStorage.getItem("raceToken");
 
-        //POST-anrop
+        //Kollar om det finns ett id som ska redigeras.
+        const editId = raceForm.dataset.id;
+
         try {
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": "Bearer " + token
-                },
-                //Omvandlar till JSON-data
-                body: JSON.stringify(newRace)
-
-            });
-            //Om anoropet misslyckades
-            if (!response.ok) {
-                throw new Error(response.status);
+            //Om loppet ska redigeras
+            if (editId) {
+                await updateRace(editId, raceData);
+                message.style.color = "green";
+                message.innerHTML = "Ditt lopp är nu uppdaterat!"
+            } else {
+                //Om ett nytt lopp ska läggas till
+                await addRace(raceData);
+                message.style.color = "green";
+                message.innerHTML = "Ditt lopp är nu tillagt på sidan!"
             }
-            //Omvandlar resultatet till JS-objekt
-            const result = await response.json();
-
-            message.style.color = "green";
-            message.innerHTML = "Ditt lopp är nu tillagt på sidan!"
 
             //Meddelande visas innan omdirigering
             setTimeout(() => {
                 window.location.href = "/"
-            }, 3000);
-
-            return result;
+            }, 2000);
 
         } catch (error) {
             message.style.color = "red";
             if (error.message === "403") {
-                message.innerHTML = "Du måste vara inloggad för att lägga till ett lopp!";
+                message.innerHTML = "Du måste vara inloggad för att lägga till eller ändra ett lopp!";
             } else if (error.message === "409") {
                 message.innerHTML = "Loppet finns redan registrerat!";
             } else {
                 message.innerHTML = "Det gick inte att lägga till lopp. Försök igen senare!"
             }
         }
-
     });
 }
 
+//Lägger till lopp
+async function addRace(data) {
 
+    //Hämtar token
+    const token = localStorage.getItem("raceToken");
 
-
-//Hämtar lopp
-async function getRaces() {
+    //POST-anrop
     try {
-        const response = await fetch(url);
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": "Bearer " + token
+            },
+            //Omvandlar till JSON-data
+            body: JSON.stringify(data)
 
+        });
         //Om anoropet misslyckades
         if (!response.ok) {
-            throw new Error;
+            throw new Error(response.status);
         }
 
         //Omvandlar resultatet till JS-objekt
-        const data = await response.json();
-
-        return data;
+        const result = await response.json();
+        return result;
 
     } catch (error) {
-        if (message) {
-            message.innerHTML = "Det gick inte att hämta datan från servern.";
+        throw Error;
+    }
+
+}
+//Uppdateralopp
+async function updateRace(id, data) {
+
+    //Hämtar token
+    const token = localStorage.getItem("raceToken");
+
+    //PUT-anrop
+    try {
+        const response = await fetch(`${url}/${id}`, {
+            method: "PUT",
+            headers: {
+                //Ange vilket format som skickas samt token
+                "Content-Type": "application/json",
+                "authorization": "Bearer " + token
+
+            },
+             //Omvandlar till JSON-data
+            body: JSON.stringify(data)
+        });
+
+        //Om anropet misslyckas
+        if (!response.ok) {
+            throw new Error(response.status)
         }
 
-        throw error;
+        //Omvandlar till JS-objekt
+        const result = await response.json();
 
+        return result;
+
+    } catch (error) {
+        throw error;
     }
+
 }
+
+
+//Raderar lopp
+async function deleteRace(id) {
+    if (!confirm("Är du säker att du vill radera loppet?")) return;
+
+    //Hämtar token
+    const token = localStorage.getItem("raceToken");
+
+    try {
+        const response = await fetch(`${url}/${id}`, {
+            method: "DELETE",
+            headers: {
+                authorization: "Bearer " + token,
+            }
+        });
+
+        //Om anropet inte lyckas.
+        if (!response.ok) {
+            throw new Error(response.status);
+        }
+        //Anropar funktionen för att uppdatera innehållet på sidan.
+        renderMyPage();
+    } catch (error) {
+        message.style.color = "red";
+        if (error.message === "401") {
+            message.innerHTML = "Du är inte behörig att radera loppet!";
+        } else {
+            message.innerHTML = "Det gick inte att radera till lopp. Försök igen senare!"
+        }
+    }
+
+}
+
+
+
+
 
 //Skriver ut alla lopp till startsida
 export async function renderRaces() {
@@ -223,7 +358,10 @@ export async function renderMyPage() {
       <p><strong>Plats:</strong> ${race.location}</p>  
       <p><strong>Om loppet:</strong> ${race.description}</p>
       <p><strong>Publicerat av:</strong>  ${race.createdBy} </p>
-      <button class="delete-button" data-id="${race._id}">Radera lopp</button>
+      <div class="button-container">
+      <button class="edit-button" data-id="${race._id}">Ändra</button>
+      <button class="delete-button" data-id="${race._id}">Radera</button>
+      </div>
       `
             //Lägger artikel i raceList.
             myRaceList.appendChild(articleEl);
@@ -250,43 +388,24 @@ export function cardButtons() {
 
             //Skickar med id som argument till funktionen deleteRace
             deleteRace(id);
+        } else if (event.target.classList.contains("edit-button")) {
+            //Hämtar rätt id från knappens data-id
+            let id = event.target.dataset.id;
 
+            //Sparar id från webbläsarens fönster
+            window.name = id;
+
+            //Skickar användaren till edit formulär
+            window.location.href = "/edit";
 
         }
     });
 }
 
-//Raderar lopp
-async function deleteRace(raceId) {
-    if (!confirm("Är du säker att du vill radera loppet?")) return;
 
-    //Hämtar token
-    const token = localStorage.getItem("raceToken");
 
-    try {
-        const response = await fetch(`${url}/${raceId}`, {
-            method: "DELETE",
-            headers: {
-                authorization: "Bearer " + token,
-            }
-        });
 
-        //Om anropet inte lyckas.
-        if (!response.ok) {
-            throw new Error(response.status);
-        }
-        //Anropar funktionen för att uppdatera innehållet på sidan.
-        renderMyPage();
-    } catch (error) {
-        message.style.color = "red";
-        if (error.message === "401") {
-            message.innerHTML = "Du är inte behörig att radera loppet!";
-        } else {
-            message.innerHTML = "Det gick inte att radera till lopp. Försök igen senare!"
-        }
-    }
 
-}
 
 
 
