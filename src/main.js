@@ -16,12 +16,16 @@ document.addEventListener("DOMContentLoaded", () => {
     //Hämtar lopp
     if (raceList) {
         renderRaces();
-        
+
     }
     //Lägger till nya lopp eller uppdaterar befintliga.
     if (raceForm) {
-    
-        getEditData();
+
+        //Hämtar data som ska uppdateras.
+        if (window.name) {
+            getEditData();
+        }
+
         submitRace();
     }
 
@@ -40,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     //Hämtar lopp till min sida
-    if(myRaceList) {
+    if (myRaceList) {
         renderMyPage();
         cardButtons();
     }
@@ -53,14 +57,14 @@ function changeMenu() {
     //Kontroll av token styr hur menyn ser ut
     if (!localStorage.getItem("raceToken")) {
         menu.innerHTML = `
-        <li><a href="/" class="nav-link current">Startsida</a></li>
+        <li><a href="/" class="nav-link">Alla lopp</a></li>
         <li><a href="/login" class="nav-link">Logga in</a></li>
         `
     } else {
         menu.innerHTML =
             `
-                <li><a href="/" class="nav-link current">Startsida</a></li>
-                <li><a href="/add" class="nav-link">Lägg till lopp</a></li>
+                <li><a href="/" class="nav-link">Alla lopp</a></li>
+                <li><a href="/my-page" class="nav-link">Min sida</a></li>
                 <li><a href="/" id="logout-link" class="nav-link">Logga ut</a></li>
                 `
     }

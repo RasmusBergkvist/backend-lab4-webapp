@@ -39,8 +39,10 @@ export async function getEditData() {
     const id = window.name;
 
     //Om id skulle saknas
-    if(!id) return;
-    
+    if (!id) {
+     return;
+    } 
+
     try {
         const response = await fetch(`${url}/${id}`);
 
@@ -55,7 +57,7 @@ export async function getEditData() {
         //Läser in datan
         if (race) {
             document.getElementById("name").value = race.name;
-            document.getElementById("date").value = race.date.slice(0,10);
+            document.getElementById("date").value = race.date.slice(0, 10);
             document.getElementById("distance").value = race.distance;
             document.getElementById("location").value = race.location;
             document.getElementById("description").value = race.description;
@@ -65,13 +67,13 @@ export async function getEditData() {
         //Sparar id som ska ska uppdateras. 
         raceForm.dataset.id = id;
 
+        //Rensar id från webbläsarfönstret
+        window.name ="";
+
     } catch (error) {
         if (message) {
             message.innerHTML = "Det gick inte att hämta datan från servern.";
         }
-
-        throw error;
-
     }
 }
 
@@ -83,7 +85,7 @@ export function submitRace() {
     raceForm.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        //Hämtar värden från input-fält
+        //input-fält
         const name = document.getElementById("name").value;
         const date = document.getElementById("date").value;
         const distance = document.getElementById("distance").value;
@@ -148,12 +150,15 @@ export function submitRace() {
                 await updateRace(editId, raceData);
                 message.style.color = "green";
                 message.innerHTML = "Ditt lopp är nu uppdaterat!"
+    
             } else {
                 //Om ett nytt lopp ska läggas till
                 await addRace(raceData);
                 message.style.color = "green";
                 message.innerHTML = "Ditt lopp är nu tillagt på sidan!"
+
             }
+
 
             //Meddelande visas innan omdirigering
             setTimeout(() => {
@@ -201,7 +206,7 @@ async function addRace(data) {
         return result;
 
     } catch (error) {
-        throw Error;
+        throw error;
     }
 
 }
@@ -221,7 +226,7 @@ async function updateRace(id, data) {
                 "authorization": "Bearer " + token
 
             },
-             //Omvandlar till JSON-data
+            //Omvandlar till JSON-data
             body: JSON.stringify(data)
         });
 
@@ -296,7 +301,7 @@ export async function renderRaces() {
             articleEl.classList.add("race-card");
 
             articleEl.innerHTML = `
-      <h3>${race.name} ${race.distance} km</h3>
+      <h3>${race.name} - ${race.distance} km</h3>
       <p><strong>Datum:</strong> ${formattedDate}</p>
       <p><strong>Plats:</strong> ${race.location}</p>  
       <p><strong>Om loppet:</strong> ${race.description}</p>
@@ -353,14 +358,16 @@ export async function renderMyPage() {
             articleEl.classList.add("race-card");
 
             articleEl.innerHTML = `
-      <h3>${race.name} ${race.distance} km</h3>
+      <h3>${race.name} - ${race.distance} km</h3>
       <p><strong>Datum:</strong> ${formattedDate}</p>
       <p><strong>Plats:</strong> ${race.location}</p>  
       <p><strong>Om loppet:</strong> ${race.description}</p>
       <p><strong>Publicerat av:</strong>  ${race.createdBy} </p>
       <div class="button-container">
-      <button class="edit-button" data-id="${race._id}">Ändra</button>
-      <button class="delete-button" data-id="${race._id}">Radera</button>
+      <button class="edit-button" data-id="${race._id}">
+      <span class="material-symbols-outlined">edit_square</span>Ändra</button>
+      <button class="delete-button" data-id="${race._id}">
+      <span class="material-symbols-outlined">delete</span>Radera</button>
       </div>
       `
             //Lägger artikel i raceList.
