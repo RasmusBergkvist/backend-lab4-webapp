@@ -119,7 +119,7 @@ main {
   display: block;
   text-align: center;
   font-weight: 600;
-  margin-top: 8px;
+  margin-block: 1rem;
 }
 
 .race-container {
@@ -177,7 +177,7 @@ footer {
 }
 
 form {
-  margin-block: 1.5rem;
+  margin-block: 10px;
   max-width: 300px;
   width: 100%;
 }
@@ -240,7 +240,7 @@ label {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: auto;
 }
 
 

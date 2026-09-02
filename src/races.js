@@ -40,8 +40,8 @@ export async function getEditData() {
 
     //Om id skulle saknas
     if (!id) {
-     return;
-    } 
+        return;
+    }
 
     try {
         const response = await fetch(`${url}/${id}`);
@@ -68,7 +68,7 @@ export async function getEditData() {
         raceForm.dataset.id = id;
 
         //Rensar id från webbläsarfönstret
-        window.name ="";
+        window.name = "";
 
     } catch (error) {
         if (message) {
@@ -150,7 +150,7 @@ export function submitRace() {
                 await updateRace(editId, raceData);
                 message.style.color = "green";
                 message.innerHTML = "Ditt lopp är nu uppdaterat!"
-    
+
             } else {
                 //Om ett nytt lopp ska läggas till
                 await addRace(raceData);
@@ -168,7 +168,20 @@ export function submitRace() {
         } catch (error) {
             message.style.color = "red";
             if (error.message === "403") {
-                message.innerHTML = "Du måste vara inloggad för att lägga till eller ändra ett lopp!";
+                //Om tokens giltlighetstid har passerat.
+                message.innerHTML = "Du har blivit utloggad. Vänligen logga in igen för att lägga till eller ändra ett lopp!";
+
+                //Raderar token och username
+                localStorage.removeItem("raceToken");
+                localStorage.removeItem("username");
+
+
+                //Omdirigering till inloggningssidan.
+                setTimeout(() => {
+                    window.location.href = "/login"
+                }, 3000);
+
+
             } else if (error.message === "409") {
                 message.innerHTML = "Loppet finns redan registrerat!";
             } else {
@@ -272,7 +285,23 @@ async function deleteRace(id) {
         message.style.color = "red";
         if (error.message === "401") {
             message.innerHTML = "Du är inte behörig att radera loppet!";
+        } else if (error.message === "403") {
+            //Om tokens giltighetstid har passerat
+            message.innerHTML = "Du har blivit utloggad. Vänligen logga in igen för att radera loppet";
+
+            //Raderar token och username
+            localStorage.removeItem("raceToken");
+            localStorage.removeItem("username");
+
+
+            //Omdirigering till inloggningssidan.
+            setTimeout(() => {
+                window.location.href = "/login"
+            }, 3000);
+
+
         } else {
+
             message.innerHTML = "Det gick inte att radera till lopp. Försök igen senare!"
         }
     }
@@ -292,6 +321,10 @@ export async function renderRaces() {
     raceList.innerHTML = "";
     try {
         const data = await getRaces();
+
+        if (data.length === 0) {
+            message.innerHTML = "Det finns inga lopp publicerade."
+        }
         data.forEach(race => {
             //Formatera datum
             const formattedDate = race.date.slice(0, 10);
@@ -304,7 +337,7 @@ export async function renderRaces() {
       <h3>${race.name} - ${race.distance} km</h3>
       <p><strong>Datum:</strong> ${formattedDate}</p>
       <p><strong>Plats:</strong> ${race.location}</p>  
-      <p><strong>Om loppet:</strong> ${race.description}</p>
+        ${race.description ? `<p><strong>Om loppet:</strong> ${race.description}</p>` : ""}
       <p><strong>Publicerat av:</strong>  ${race.createdBy} </p>
       `
             //Lägger artikel i raceList.
@@ -361,7 +394,7 @@ export async function renderMyPage() {
       <h3>${race.name} - ${race.distance} km</h3>
       <p><strong>Datum:</strong> ${formattedDate}</p>
       <p><strong>Plats:</strong> ${race.location}</p>  
-      <p><strong>Om loppet:</strong> ${race.description}</p>
+      ${race.description ? `<p><strong>Om loppet:</strong> ${race.description}</p>` : ""}
       <p><strong>Publicerat av:</strong>  ${race.createdBy} </p>
       <div class="button-container">
       <button class="edit-button" data-id="${race._id}">
