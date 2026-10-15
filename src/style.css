@@ -76,7 +76,7 @@ main {
   width: 100%;
   max-width: 960px;
   min-height: 100vh;
-  margin: 0 auto;
+  margin: 0 auto 2rem;
   padding-inline: 1rem;
 }
 

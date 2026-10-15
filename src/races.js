@@ -5,7 +5,7 @@ const myRaceList = document.getElementById("my-race-list");
 const raceForm = document.getElementById("race-form");
 const message = document.getElementById("message");
 
-const url = "http://localhost:3000/races";
+const url = "https://backend-lab4-api.onrender.com/races";
 
 //Hämtar lopp
 async function getRaces() {

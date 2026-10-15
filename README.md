@@ -1,7 +1,7 @@
 # Laboration 4.2 – Webbapplikation
-Detta är en webbapplikation för publicering av löparlopp. Det går att skapa användare, logga in, samt skapa och hantera sina publicerade lopp. Applikationens innehåll och åtkomst authentiseras med hjälp av tokens, samt är kopplad till ett REST API som lagrar och hämtar data från en NoSQL-databas.
+Detta är en webbapplikation för att publicera av löparlopp. Det går att skapa användare, logga in, samt skapa och hantera sina publicerade lopp. Applikationens innehåll och åtkomst authentiseras med hjälp av tokens, samt är kopplad till ett REST API som lagrar och hämtar data från en NoSQL-databas.
 
-## Url till appplikation
+## Url till applikation
 
 
 ## Funktioner
@@ -13,7 +13,7 @@ Detta är en webbapplikation för publicering av löparlopp. Det går att skapa 
 
 ## Tekniker
 * HTML, CSS, JavaScript
-* REST API
+* REST-API
 * CORS
 * Fetch API med Async/Await
 * Local Storage
@@ -27,7 +27,7 @@ Detta är en webbapplikation för publicering av löparlopp. Det går att skapa 
 * När användaren loggar ut rensas Local Storage.
 * Token är giltig i 1 timme, därefter behöver användaren logga in på nytt.
 * Kontroll görs om användaren har en token på sidorna my-page, add och edit. Saknas token omdirigeras användare till inloggningssidan.
-* Fetch-anrop användas för att skicka till eller hämtar data från REST API med GET, POST, PUT, DELETE. 
+* Fetch-anrop användas för att skicka till eller hämtar data från REST-API med GET, POST, PUT, DELETE. 
 * Datan skickas i JSON-format med i headern Content-Type: application/json och omvandlas med JSON.stringify(data) i body. 
 * Vid skapande (POST), redigering (PUT) och radering av lopp (DELETE) krävs att token skickas med i headern "authorization": "Bearer " + token.
 * Backend hanterar och lagrar datan i en NoSQL-databas.
