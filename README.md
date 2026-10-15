@@ -2,7 +2,7 @@
 Detta är en webbapplikation för att publicera av löparlopp. Det går att skapa användare, logga in, samt skapa och hantera sina publicerade lopp. Applikationens innehåll och åtkomst authentiseras med hjälp av tokens, samt är kopplad till ett REST API som lagrar och hämtar data från en NoSQL-databas.
 
 ## Url till applikation
-
+https://backend-lab4-webapp.onrender.com/
 
 ## Funktioner
 * Skapa användare 
