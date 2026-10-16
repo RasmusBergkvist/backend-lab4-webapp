@@ -64,7 +64,7 @@ export function createAccount() {
             await addMember(newAccount);
             //Vid lyckat registering
             message.style.color = "green";
-            message.innerHTML = "Ditt konto är nu skapat. Du skickas vidare till login-sidan."
+            message.innerHTML = "Ditt konto är nu skapat. Du skickas vidare till inloggningssidan."
 
             setTimeout(() => {
                 window.location.href = "/login"
